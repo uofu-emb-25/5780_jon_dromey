@@ -15,7 +15,7 @@ int lab1_main(void) {
     HAL_GPIO_Init(GPIOC, &initStr);
     HAL_GPIO_WritePin(GPIOC, GPIO_PIN_8, GPIO_PIN_SET);
     while (1) {
-        HAL_Delay(200);
+        HAL_Delay(1000);
         HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_8 | GPIO_PIN_9);
     }
 
