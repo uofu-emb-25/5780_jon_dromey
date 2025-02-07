@@ -29,17 +29,19 @@ int lab1_main(void) {
 
     while (1) {
         HAL_Delay(1000);
-        //if (GPIOC->IDR & 0b00000000000000000000000001000000) {
-        if (My_HAL_GPIO_ReadPin(GPIOC, 6)) {
-            //GPIOC->BSRR = 0b00000000010000000000000010000000; // set PC7 and reset PC6
-            My_HAL_GPIO_WritePin(GPIOC, 7, 1);
-            My_HAL_GPIO_WritePin(GPIOC, 6, 0);
-        }
-        else {
-            // GPIOC->BSRR = 0b00000000100000000000000001000000; // set PC6 and reset PC7
-            My_HAL_GPIO_WritePin(GPIOC, 7, 0);
-            My_HAL_GPIO_WritePin(GPIOC, 6, 1);
-        }
+        // //if (GPIOC->IDR & 0b00000000000000000000000001000000) {
+        // if (My_HAL_GPIO_ReadPin(GPIOC, 6)) {
+        //     //GPIOC->BSRR = 0b00000000010000000000000010000000; // set PC7 and reset PC6
+        //     My_HAL_GPIO_WritePin(GPIOC, 7, 1);
+        //     My_HAL_GPIO_WritePin(GPIOC, 6, 0);
+        // }
+        // else {
+        //     // GPIOC->BSRR = 0b00000000100000000000000001000000; // set PC6 and reset PC7
+        //     My_HAL_GPIO_WritePin(GPIOC, 7, 0);
+        //     My_HAL_GPIO_WritePin(GPIOC, 6, 1);
+        // }
+        My_HAL_GPIO_TogglePin(GPIOC, 6);
+        My_HAL_GPIO_TogglePin(GPIOC, 7);
     }
 
 }
