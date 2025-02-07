@@ -27,8 +27,11 @@ int lab1_main(void) {
     assert(GPIOA->MODER == 0x28000000);
     //assert(GPIOA->OSPEEDR == 0x0C000000); // not sure why this doesn't work
 
+    int time_delay = 50;
+
     while (1) {
-        HAL_Delay(1000);
+        HAL_Delay(time_delay);
+        time_delay += 50;
         // //if (GPIOC->IDR & 0b00000000000000000000000001000000) {
         // if (My_HAL_GPIO_ReadPin(GPIOC, 6)) {
         //     //GPIOC->BSRR = 0b00000000010000000000000010000000; // set PC7 and reset PC6
