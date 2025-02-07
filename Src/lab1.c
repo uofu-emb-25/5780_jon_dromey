@@ -7,9 +7,14 @@ int lab1_main(void) {
 
     //__HAL_RCC_GPIOC_CLK_ENABLE(); // enable the GPIOC clock in the RCC
     My_HAL_RCC_GPIOC_CLK_ENABLE();
+    My_HAL_RCC_GPIOA_CLK_ENABLE();
 
-    GPIOC->MODER = 0b00000000000001010101000000000000; // set pins 6 and 7 to be outputs
-    GPIOA->PUPDR = 0x24000002; // set PA0 to pull down
+    // GPIO_InitTypeDef initStr = {GPIO_PIN_8 | GPIO_PIN_9,
+    //                             GPIO_MODE_OUTPUT_PP,
+    //                             GPIO_SPEED_FREQ_LOW,
+    //                             GPIO_NOPULL};
+
+    My_HAL_GPIO_Init();
 
     GPIOC->BSRR = 0b00000000000000000000000001000000; // set PC6
 
@@ -20,15 +25,20 @@ int lab1_main(void) {
     assert(GPIOC->PUPDR == 0x00000000);
 
     assert(GPIOA->MODER == 0x28000000);
-    //assert(GPIOA->OSPEEDR == 0x0C000000);
+    //assert(GPIOA->OSPEEDR == 0x0C000000); // not sure why this doesn't work
 
     while (1) {
         HAL_Delay(1000);
-        if (GPIOC->IDR & 0b00000000000000000000000001000000) {
-            GPIOC->BSRR = 0b00000000010000000000000010000000; // set PC7 and reset PC6
+        //if (GPIOC->IDR & 0b00000000000000000000000001000000) {
+        if (My_HAL_GPIO_ReadPin(GPIOC, 6)) {
+            //GPIOC->BSRR = 0b00000000010000000000000010000000; // set PC7 and reset PC6
+            My_HAL_GPIO_WritePin(GPIOC, 7, 1);
+            My_HAL_GPIO_WritePin(GPIOC, 6, 0);
         }
         else {
-            GPIOC->BSRR = 0b00000000100000000000000001000000; // set PC6 and reset PC7
+            // GPIOC->BSRR = 0b00000000100000000000000001000000; // set PC6 and reset PC7
+            My_HAL_GPIO_WritePin(GPIOC, 7, 0);
+            My_HAL_GPIO_WritePin(GPIOC, 6, 1);
         }
     }
 
