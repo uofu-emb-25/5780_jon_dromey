@@ -1,22 +1,22 @@
 /**
-  ******************************************************************************
-  * @file    Templates/Src/stm32f0xx_it.c
-  * @author  MCD Application Team
-  * @brief   Main Interrupt Service Routines.
-  *          This file provides template for all exceptions handler and
-  *          peripherals interrupt service routine.
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2016 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
+ ******************************************************************************
+ * @file    Templates/Src/stm32f0xx_it.c
+ * @author  MCD Application Team
+ * @brief   Main Interrupt Service Routines.
+ *          This file provides template for all exceptions handler and
+ *          peripherals interrupt service routine.
+ ******************************************************************************
+ * @attention
+ *
+ * Copyright (c) 2016 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file
+ * in the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ ******************************************************************************
+ */
 #include "main.h"
 #include <stm32f0xx_hal.h>
 #include <stm32f0xx_it.h>
@@ -26,19 +26,19 @@
 /******************************************************************************/
 
 /**
-  * @brief   This function handles NMI exception.
-  * @param  None
-  * @retval None
-  */
+ * @brief   This function handles NMI exception.
+ * @param  None
+ * @retval None
+ */
 void NMI_Handler(void)
 {
 }
 
 /**
-  * @brief  This function handles Hard Fault exception.
-  * @param  None
-  * @retval None
-  */
+ * @brief  This function handles Hard Fault exception.
+ * @param  None
+ * @retval None
+ */
 void HardFault_Handler(void)
 {
   /* Go to infinite loop when Hard Fault exception occurs */
@@ -48,31 +48,39 @@ void HardFault_Handler(void)
 }
 
 /**
-  * @brief  This function handles SVCall exception.
-  * @param  None
-  * @retval None
-  */
+ * @brief  This function handles SVCall exception.
+ * @param  None
+ * @retval None
+ */
 void SVC_Handler(void)
 {
 }
 
 /**
-  * @brief  This function handles PendSVC exception.
-  * @param  None
-  * @retval None
-  */
+ * @brief  This function handles PendSVC exception.
+ * @param  None
+ * @retval None
+ */
 void PendSV_Handler(void)
 {
 }
 
 /**
-  * @brief  This function handles SysTick Handler.
-  * @param  None
-  * @retval None
-  */
+ * @brief  This function handles SysTick Handler.
+ * @param  None
+ * @retval None
+ */
+
 void SysTick_Handler(void)
 {
-    HAL_IncTick();
+  static int systick_count = 200;
+  systick_count--;
+  if (systick_count == 0)
+  {
+    // My_HAL_GPIO_TogglePin(GPIOC, 7);
+    systick_count = 200;
+  }
+  HAL_IncTick();
 }
 
 /******************************************************************************/
@@ -83,10 +91,10 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 /**
-  * @brief  This function handles PPP interrupt request.
-  * @param  None
-  * @retval None
-  */
+ * @brief  This function handles PPP interrupt request.
+ * @param  None
+ * @retval None
+ */
 /*void PPP_IRQHandler(void)
 {
 }*/

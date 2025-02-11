@@ -15,6 +15,13 @@ int lab2_main() {
 
     My_HAL_GPIO_WritePin(GPIOC, 9, 1);
 
+    GPIO_InitTypeDef initStrA = {GPIO_PIN_0,
+        GPIO_MODE_INPUT,
+        GPIO_SPEED_FREQ_LOW,
+        GPIO_PULLDOWN};
+
+    My_HAL_GPIO_Init(GPIOA, &initStrA);
+
     while(1)
     {
         HAL_Delay(400);

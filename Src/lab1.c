@@ -24,18 +24,18 @@ int lab1_main(void) {
 
     My_HAL_GPIO_Init(GPIOA, &initStrA);
 
-    GPIOC->BSRR = 0b00000000000000000000000001000000; // set PC6
-
-    // My_HAL_GPIO_WritePin(GPIOC, 6, 1);
+    My_HAL_GPIO_WritePin(GPIOC, 6, 1);
 
     
-    // assert(GPIOC->MODER == 0b00000000000001010101000000000000);
-    // assert(GPIOC->OTYPER == 0x00000000);
-    // assert(GPIOC->OSPEEDR == 0x00000000);
-    // assert(GPIOC->PUPDR == 0x00000000);
+    assert(GPIOC->MODER == 0b00000000000000000101000000000000);
+    assert(GPIOC->OTYPER == 0x00000000);
+    assert(GPIOC->OSPEEDR == 0x00000000);
+    assert(GPIOC->PUPDR == 0x00000000);
 
-    // assert(GPIOA->MODER == 0x28000000);
-    // assert(GPIOA->OSPEEDR == 0x0C000000); // not sure why this doesn't work
+    assert(GPIOA->MODER == 0x28000000);
+    assert(GPIOA->OSPEEDR == 0x0C000000);
+    // assert((GPIOA->PUPDR & 0x00000003) == 2); // this assert fails, not sure why
+
     int debouncer = 0;
 
     while (1) {
@@ -50,7 +50,6 @@ int lab1_main(void) {
             My_HAL_GPIO_TogglePin(GPIOC, 7);
         }
 
-        //HAL_Delay(5);
     }
 
 }
