@@ -1,6 +1,12 @@
 #include <stm32f0xx_hal.h>
 #include <assert.h>
 
+void EXTI0_1_IRQHandler() {
+    EXTI->PR |= 0x01;
+    My_HAL_GPIO_TogglePin(GPIOC, 8);
+    My_HAL_GPIO_TogglePin(GPIOC, 9);
+}
+
 int lab2_main() {
     HAL_Init(); // reset all peripherals, init the flash and systick
     SystemClock_Config(); // configure the system clock
