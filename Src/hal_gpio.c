@@ -170,3 +170,12 @@ void My_HAL_GPIO_TogglePin(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin)
     // int pinState = My_HAL_GPIO_ReadPin(GPIOx, GPIO_Pin);
     GPIOx->ODR ^= 1 << GPIO_Pin;
 }
+
+void UserButton_Interrupt_Init(void)
+{
+    EXTI->IMR |= 0x01;
+    EXTI->RTSR |= 0x01;
+    SYSCFG->EXTICR[0] &= 0xFFFFFFF0;
+    NVIC_EnableIRQ(EXTI0_1_IRQn);
+    NVIC_SetPriority(EXTI0_1_IRQn, 1);
+}

@@ -1,4 +1,5 @@
 #include <stm32f0xx_hal.h>
+#include <assert.h>
 
 int lab2_main() {
     HAL_Init(); // reset all peripherals, init the flash and systick
@@ -21,6 +22,14 @@ int lab2_main() {
         GPIO_PULLDOWN};
 
     My_HAL_GPIO_Init(GPIOA, &initStrA);
+
+    assert(EXTI->IMR == 0x7F840000);
+    assert(EXTI->RTSR == 0x00000000);
+    assert((SYSCFG->EXTICR[0] & 0x0F) == 0);
+    UserButton_Interrupt_Init();
+    assert(EXTI->IMR == 0x7F840001);
+    assert(EXTI->RTSR == 0x00000001);
+    assert((SYSCFG->EXTICR[0] & 0x0F) == 0);
 
     while(1)
     {

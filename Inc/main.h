@@ -2,6 +2,7 @@
 #include <stdint.h>
 
 void SystemClock_Config(void);
+void UserButton_Interrupt_Init(void);
 int lab1_main(void);
 int lab2_main(void);
 int lab3_main(void);
