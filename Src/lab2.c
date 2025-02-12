@@ -2,9 +2,16 @@
 #include <assert.h>
 
 void EXTI0_1_IRQHandler() {
-    EXTI->PR |= 0x01;
+    
     My_HAL_GPIO_TogglePin(GPIOC, 8);
     My_HAL_GPIO_TogglePin(GPIOC, 9);
+
+    // Delay loop
+    for (volatile uint32_t i = 0; i < 3000000; i++);
+
+    My_HAL_GPIO_TogglePin(GPIOC, 8);
+    My_HAL_GPIO_TogglePin(GPIOC, 9);
+    EXTI->PR |= 0x01;
 }
 
 int lab2_main() {
