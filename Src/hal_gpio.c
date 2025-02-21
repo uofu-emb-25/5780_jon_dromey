@@ -177,6 +177,6 @@ void UserButton_Interrupt_Init(void)
     EXTI->RTSR |= 0x01;
     SYSCFG->EXTICR[0] &= 0xFFFFFFF0;
     NVIC_EnableIRQ(EXTI0_1_IRQn);
-    NVIC_SetPriority(EXTI0_1_IRQn, 1);
-    NVIC_SetPriority(SysTick_IRQn, 0);
+    NVIC_SetPriority(EXTI0_1_IRQn, 0);
+    NVIC_SetPriority(SysTick_IRQn, 1);
 }

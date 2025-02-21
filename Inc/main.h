@@ -3,6 +3,7 @@
 
 void SystemClock_Config(void);
 void UserButton_Interrupt_Init(void);
+void TIMER2_SETUP(void);
 int lab1_main(void);
 int lab2_main(void);
 int lab3_main(void);
