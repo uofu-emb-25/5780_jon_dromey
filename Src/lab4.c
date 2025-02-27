@@ -3,23 +3,6 @@
 int32_t command = -1;
 char color = 'a';
 
-void Transmit_Char(char toTransmit)
-{
-    while (!(USART3->ISR & 0x80))
-        ;
-    USART3->TDR = toTransmit;
-}
-
-void Transmit_String(char *toTransmit)
-{
-
-    while (*toTransmit)
-    {
-        Transmit_Char(*toTransmit);
-        toTransmit++;
-    }
-}
-
 void USART3_4_IRQHandler() {
     if (USART3->ISR & 0b0100000)
         { // Read data register not empty
