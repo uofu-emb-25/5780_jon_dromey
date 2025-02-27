@@ -1,6 +1,7 @@
 #pragma once
 #include <stdint.h>
 
+void Transmit_Char(char toTransmit);
 void SystemClock_Config(void);
 void UserButton_Interrupt_Init(void);
 void TIMER2_SETUP(void);
