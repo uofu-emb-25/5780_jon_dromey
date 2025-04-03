@@ -73,12 +73,18 @@ void PendSV_Handler(void)
 
 void SysTick_Handler(void)
 {
-  // static int systick_count = 200;
+  // static int systick_count = 1000;
   // systick_count--;
   // if (systick_count == 0)
   // {
-  //   My_HAL_GPIO_TogglePin(GPIOC, 7);
-  //   systick_count = 200;
+  //   if (TIM3->CCR1 < 2000)
+  //   {
+  //     TIM3->CCR1 += 100;
+  //   }
+  //   else {
+  //     TIM3->CCR1 = 1500;
+  //   }
+  //   systick_count = 1000;
   // }
   HAL_IncTick();
 }
