@@ -61,7 +61,7 @@ int lab6_main()
 
     while (1)
     {
-        //HAL_Delay(200);
+        HAL_Delay(1);
 
         uint32_t ADC_reading = ADC1->DR;
 
