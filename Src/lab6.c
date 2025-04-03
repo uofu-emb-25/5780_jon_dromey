@@ -1,5 +1,10 @@
 #include <stm32f0xx_hal.h>
 
+// Sine Wave: 8-bit, 32 samples/cycle
+const uint8_t sine_table[32] = {127,151,175,197,216,232,244,251,254,251,244,
+    232,216,197,175,151,127,102,78,56,37,21,9,2,0,2,9,21,37,56,78,102};
+    
+
 int lab6_main()
 {
     HAL_Init();
@@ -59,17 +64,41 @@ int lab6_main()
     // Start the conversion
     ADC1->CR |= (0b01 << 2);
 
+
+
+    // Set PA4 to analog function for the DAC
+    RCC->AHBENR |= RCC_AHBENR_GPIOAEN;
+    GPIO_InitTypeDef initStr3 = {GPIO_PIN_4,
+        GPIO_MODE_ANALOG,
+        GPIO_NOPULL};
+    My_HAL_GPIO_Init(GPIOA, &initStr3);
+
+    // Enable the DAC
+    RCC->APB1ENR |= RCC_APB1ENR_DACEN;
+    // Select software trigger and enable the DAC
+    DAC1->CR |= ((0b111 << 3) | 0b01);
+
+
+    uint16_t wave_index = 0;
+    uint8_t delay = 1;
     while (1)
     {
-        HAL_Delay(1);
 
+        // HAL_Delay(0) seems to cause a 1 ms delay??
+        HAL_Delay(0);
+
+        // Loop through the sine table and write the values to the DAC data reg
+        DAC1->DHR8RD = sine_table[wave_index];
+        wave_index++;
+        if (wave_index > 31)
+        {
+            wave_index = 0;
+        }
+
+        // Read from the ADC
         uint32_t ADC_reading = ADC1->DR;
 
-        // char adc_reading_string[10];
-        // itoa(ADC_reading, adc_reading_string, 10);
-        // Transmit_String(adc_reading_string);
-        // Transmit_String("\n\r");
-
+        // Turn on the leds according to different thresholds
         if (ADC_reading > 254)
         {
             My_HAL_GPIO_WritePin(GPIOC, 8, 1);
