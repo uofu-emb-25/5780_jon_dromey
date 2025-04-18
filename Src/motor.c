@@ -11,8 +11,12 @@ volatile int16_t target_rpm = 0;    	// Desired speed target
 volatile int16_t motor_speed = 0;   	// Measured motor speed
 volatile int8_t adc_value = 0;      	// ADC measured motor current
 volatile int16_t error = 0;         	// Speed error signal
-volatile uint8_t Kp = 1;            	// Proportional gain
-volatile uint8_t Ki = 1;            	// Integral gain
+volatile uint8_t Kp = 20;            	// Proportional gain
+volatile uint8_t Ki = 10;            	// Integral gain
+
+static uint8_t buf0[1024];
+static uint8_t buf1[1024];
+static uint8_t buf2[1024];
 
 // Sets up the entire motor drive system
 void motor_init(void) {
@@ -95,7 +99,7 @@ void encoder_init(void) {
     
     // Select PSC and ARR values that give an appropriate interrupt rate
     TIM6->PSC = 11;
-    TIM6->ARR = 30000;
+    TIM6->ARR = 33333; // 
     
     TIM6->DIER |= TIM_DIER_UIE;             // Enable update event interrupt
     TIM6->CR1 |= TIM_CR1_CEN;               // Enable Timer
@@ -110,6 +114,9 @@ union byte_split {
 };
 
 void log_data(void) {
+    SEGGER_RTT_ConfigUpBuffer(0, "", buf0, 1024, SEGGER_RTT_MODE_NO_BLOCK_SKIP);
+    SEGGER_RTT_ConfigUpBuffer(1, "", buf1, 1024, SEGGER_RTT_MODE_NO_BLOCK_SKIP);
+    SEGGER_RTT_ConfigUpBuffer(2, "", buf2, 1024, SEGGER_RTT_MODE_NO_BLOCK_SKIP);
     // Begin critical section
     __disable_irq();
     uint32_t duty_cycle_copy = duty_cycle;    
@@ -183,6 +190,8 @@ void PI_update(void) {
      */
     
     /// TODO: calculate error signal and write to "error" variable
+    error = (target_rpm) - (motor_speed);
+
     
     /* Hint: Remember that your calculated motor speed may not be directly in RPM!
      *       You will need to convert the target or encoder speeds to the same units.
@@ -192,8 +201,16 @@ void PI_update(void) {
     
     
     /// TODO: Calculate integral portion of PI controller, write to "error_integral" variable
+    error_integral += error * Ki;
+    
     
     /// TODO: Clamp the value of the integral to a limited positive range
+    if (error_integral > 3200) {
+        error_integral = 3200;
+    }
+    else if (error_integral < -3200) {
+        error_integral = -3200;
+    }
     
     /* Hint: The value clamp is needed to prevent excessive "windup" in the integral.
      *       You'll read more about this for the post-lab. The exact value is arbitrary
@@ -202,6 +219,7 @@ void PI_update(void) {
      */
     
     /// TODO: Calculate proportional portion, add integral and write to "output" variable
+    error = error * Kp + error_integral;
     
     int16_t output = 0; // Change this!
     
@@ -222,11 +240,17 @@ void PI_update(void) {
      */
 
      /// TODO: Divide the output into the proper range for output adjustment
+     output = error >> 5;
+     //output = 75;
      
      /// TODO: Clamp the output value between 0 and 100 
+     if (output > 100) output = 100;
+     if (output < 0) output = 0;
     
     pwm_setDutyCycle(output);
     duty_cycle = output;            // For debug viewing
+
+    //GPIOC->ODR ^= GPIO_ODR_8;
 
     // Read the ADC value for current monitoring, actual conversion into meaningful units 
     // will be performed by STMStudio

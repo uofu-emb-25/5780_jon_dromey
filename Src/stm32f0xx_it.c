@@ -73,6 +73,7 @@ void PendSV_Handler(void)
 
 void SysTick_Handler(void)
 {
+  HAL_IncTick();
   // static int systick_count = 1000;
   // systick_count--;
   // if (systick_count == 0)
@@ -86,7 +87,10 @@ void SysTick_Handler(void)
   //   }
   //   systick_count = 1000;
   // }
-  HAL_IncTick();
+  #if defined(LAB7)
+  Lab7_Systick_Callback();
+  #endif
+  
 }
 
 /******************************************************************************/

@@ -52,6 +52,7 @@ void Lab7_Systick_Callback(void) {
 
     if(debouncer == 0x7FFFFFFF) {
         // Begin critical section
+        // GPIOC->ODR ^= GPIO_ODR_8;
         __disable_irq();
         switch(target_rpm) {
             case 80:
@@ -67,6 +68,7 @@ void Lab7_Systick_Callback(void) {
                 target_rpm = 0;
                 break;
         }
+        
         __enable_irq();
         // End critical section
     }
